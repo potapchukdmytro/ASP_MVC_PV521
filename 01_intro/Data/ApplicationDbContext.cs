@@ -28,7 +28,7 @@ namespace _01_intro.Data
                 .HasColumnType("text");
 
                 e.Property(c => c.Image)
-                .HasMaxLength(100);
+                .HasMaxLength(255);
             });
 
             // Product
@@ -44,7 +44,7 @@ namespace _01_intro.Data
                 .HasColumnType("text");
 
                 e.Property(p => p.Image)
-                .HasMaxLength(100);
+                .HasMaxLength(255);
             });
 
             // Relationships
