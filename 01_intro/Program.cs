@@ -1,4 +1,5 @@
 using _01_intro.Data;
+using _01_intro.Data.Initializer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,5 +35,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+// Seeder
+await app.SeedAsync();
 
 app.Run();
