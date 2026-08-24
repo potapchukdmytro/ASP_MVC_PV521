@@ -58,5 +58,47 @@ namespace _01_intro.Repositories
 
             return null;
         }
+
+        public async Task<string?> UpdateAsync(CategoryUpdateVM vm)
+        {
+            if (string.IsNullOrWhiteSpace(vm.Name))
+            {
+                return "Назва категорії є обов'язковою";
+            }
+
+            if (await Categories.AnyAsync(c => c.Name.ToLower() == vm.Name.ToLower() && c.Id != vm.Id))
+            {
+                return $"Категорія '{vm.Name}' вже існує";
+            }
+
+            var model = await GetByIdAsync(vm.Id);
+
+            if(model == null)
+            {
+                return $"Категорія за id '{vm.Id}' не знайдена";
+            }
+
+            model.Description = vm.Description;
+            model.Name = vm.Name;
+            model.Image = vm.Image;
+
+            await _context.SaveChangesAsync();
+
+            return null;
+        }
+
+        public async Task<string?> DeleteAsync(int id)
+        {
+            var model = await GetByIdAsync(id);
+
+            if(model == null)
+            {
+                return $"Категорія за id '{id}' не знайдена";
+            }
+
+            _context.Categories.Remove(model);
+            await _context.SaveChangesAsync();
+            return null;
+        }
     }
 }
