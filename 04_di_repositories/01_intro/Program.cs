@@ -1,5 +1,7 @@
+using _01_intro;
 using _01_intro.Data;
 using _01_intro.Data.Initializer;
+using _01_intro.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     var connectionString = builder.Configuration.GetConnectionString("localDb");
     opt.UseNpgsql(connectionString);
 });
+
+// Add repositories
+// Створює ваш клас у єдиному екземплярі
+//builder.Services.AddSingleton<CategoryRepository>();
+
+// Створює клас кожен раз коли він запитується
+//builder.Services.AddTransient<CategoryRepository>();
+
+// Створює клас після отримання запиту та видаляє після відправлення відповіді
+builder.Services.AddScoped<CategoryRepository>();
 
 var app = builder.Build();
 
