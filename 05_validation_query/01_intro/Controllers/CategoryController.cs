@@ -31,6 +31,14 @@ namespace _01_intro.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CategoryCreateVM viewModel)
         {
+            // Validation
+            //ModelState.AddModelError("Name", "Тестова помилка");
+
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
             var result = await _categoryRepository.CreateAsync(viewModel);
 
             if(result == null)
@@ -73,6 +81,11 @@ namespace _01_intro.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(CategoryUpdateVM viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
             var result = await _categoryRepository.UpdateAsync(viewModel);
 
             if(result == null)

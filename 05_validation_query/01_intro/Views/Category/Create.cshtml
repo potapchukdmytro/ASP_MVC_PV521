@@ -12,25 +12,31 @@
         method="post"
         class="m-auto border p-5 mt-4 rounded-3" 
         style="width: 40%; background-color: #efefef;">
+
         @* name *@
         <div>
             <label for="name" class="form-label">Назва</label>
             <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Введіть назву категорії">
-            <span class="mx-2" style="color: red; font-size: 0.8rem;">Тут буде текст помилки валідації</span>
+            <span asp-validation-for="Name" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
+            @* @foreach(var error in ViewData.ModelState["Name"]?.Errors ?? [])
+            {
+                <span class="mx-2" style="color: red; font-size: 0.8rem;">@error.ErrorMessage</span>    
+                <br/>
+            } *@
         </div>
 
         @* descripton *@
         <div>
             <label for="description" class="form-label mt-4">Опис</label>
             <input asp-for="Description" type="text" class="form-control" id="description" placeholder="Введіть опис категорії">
-            <span class="mx-2" style="color: red; font-size: 0.8rem;">Тут буде текст помилки валідації</span>
+            <span asp-validation-for="Description" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
         </div>
 
         @* image *@
         <div>
             <label for="image" class="form-label mt-4">Зображення</label>
             <input asp-for="Image" type="text" class="form-control" id="image" placeholder="Введіть посилання на фото">
-            <span class="mx-2" style="color: red; font-size: 0.8rem;">Тут буде текст помилки валідації</span>
+            <span asp-validation-for="Image" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
         </div>
 
         <div class="mt-4 text-center">
