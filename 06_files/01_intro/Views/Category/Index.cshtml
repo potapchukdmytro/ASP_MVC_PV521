@@ -20,7 +20,7 @@
                 <div class="col-3 p-2">
                     <div class="card h-100 p-3 card-hover">
                         <div style="height: 175px;">
-                            <img class="w-100 h-100" style="object-fit: contain;" src="@category.Image" alt="@category.Name" />
+                            <img class="w-100 h-100" style="object-fit: contain;" src="~/images/categories/@(category.Image ?? "default.jpg")" alt="@category.Name" />
                         </div>
                         <h3 class="card-header mt-1">@category.Name</h3>
                         <div class="card-body">

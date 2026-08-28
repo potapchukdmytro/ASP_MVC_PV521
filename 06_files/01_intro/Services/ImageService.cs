@@ -1,4 +1,8 @@
-﻿namespace _01_intro.Services
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
+
+namespace _01_intro.Services
 {
     public class ImageService
     {
@@ -50,6 +54,32 @@
             var res = await Task.WhenAll(tasks);
 
             return res ?? [];
+        }
+
+        public void DeleteImage(string imagePath)
+        {
+            if(File.Exists(imagePath))
+            {
+                File.Delete(imagePath);
+            }
+        }
+
+        public async Task PreviewImage(IFormFile file, string imagePath)
+        {
+            using (var fileStream = file.OpenReadStream())
+            {
+                using (var image = await Image.LoadAsync(fileStream))
+                {
+                    image.Mutate(i => i.Resize(300, 0));
+
+                    var encoder = new JpegEncoder
+                    {
+                        Quality = 75
+                    };
+
+                    await image.SaveAsJpegAsync(imagePath, encoder);
+                }
+            }
         }
     }
 }

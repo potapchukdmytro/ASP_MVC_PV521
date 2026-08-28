@@ -28,7 +28,7 @@ namespace _01_intro.Data
                 .HasColumnType("text");
 
                 e.Property(c => c.Image)
-                .HasMaxLength(255);
+                .HasMaxLength(50);
             });
 
             // Product

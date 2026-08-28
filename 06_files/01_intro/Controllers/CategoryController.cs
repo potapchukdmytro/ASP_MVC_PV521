@@ -70,7 +70,6 @@ namespace _01_intro.Controllers
             {
                 Id = category.Id,
                 Name = category.Name,
-                Image = category.Image,
                 Description = category.Description
             };
 

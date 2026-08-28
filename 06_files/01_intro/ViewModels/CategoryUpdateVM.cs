@@ -12,7 +12,6 @@ namespace _01_intro.ViewModels
 
         public string? Description { get; set; }
 
-        [MaxLength(255, ErrorMessage = "Максимальна довжина 255 символів")]
-        public string? Image { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

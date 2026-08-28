@@ -11,12 +11,16 @@ namespace _01_intro.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _environment;
         private readonly ImageService _imageService;
+        private readonly string _imagesPath;
 
         public CategoryRepository(ApplicationDbContext context, IWebHostEnvironment environment, ImageService imageService)
         {
             _context = context;
             _environment = environment;
             _imageService = imageService;
+
+            string root = _environment.WebRootPath;
+            _imagesPath = Path.Combine(root, "images", "categories");
         }
 
         public IQueryable<Category> Categories => _context.Categories.AsNoTracking();
@@ -59,10 +63,13 @@ namespace _01_intro.Repositories
             // SaveImage
             if(vm.Image != null)
             {
-                string root = _environment.WebRootPath;
-                string directory = Path.Combine(root, "images", "categories");
+                model.Image = await _imageService.SaveImageAsync(vm.Image, _imagesPath);
 
-                model.Image = await _imageService.SaveImageAsync(vm.Image, directory);
+                //if (model.Image != null)
+                //{
+                //    string previewPath = Path.Combine(_imagesPath, "preview", model.Image);
+                //    await _imageService.PreviewImage(vm.Image, previewPath);
+                //}
             }
 
             await _context.Categories.AddAsync(model);
@@ -92,7 +99,17 @@ namespace _01_intro.Repositories
 
             model.Description = vm.Description;
             model.Name = vm.Name;
-            model.Image = vm.Image;
+
+            if(vm.Image != null)
+            {
+                if(model.Image != null)
+                {
+                    string imagePath = Path.Combine(_imagesPath, model.Image);
+                    _imageService.DeleteImage(imagePath);
+                }
+
+                model.Image = await _imageService.SaveImageAsync(vm.Image, _imagesPath);
+            }
 
             await _context.SaveChangesAsync();
 
@@ -108,8 +125,17 @@ namespace _01_intro.Repositories
                 return $"Категорія за id '{id}' не знайдена";
             }
 
+            string? modelImage = model.Image;
+
             _context.Categories.Remove(model);
-            await _context.SaveChangesAsync();
+            int res = await _context.SaveChangesAsync();
+
+            if (modelImage != null && res != 0)
+            {
+                string imagePath = Path.Combine(_imagesPath, modelImage);
+                _imageService.DeleteImage(imagePath);
+            }
+
             return null;
         }
     }
