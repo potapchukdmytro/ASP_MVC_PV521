@@ -3,6 +3,7 @@ using _01_intro.Data.Initializer;
 using _01_intro.Repositories;
 using _01_intro.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using pv521_shop.Data;
 
@@ -45,7 +46,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
 
 // Створює клас після отримання запиту та видаляє після відправлення відповіді
 builder.Services.AddScoped<CategoryRepository>();
+
+// Add services
 builder.Services.AddScoped<ImageService>();
+builder.Services.AddScoped<IEmailSender, EmailService>();
 
 var app = builder.Build();
 

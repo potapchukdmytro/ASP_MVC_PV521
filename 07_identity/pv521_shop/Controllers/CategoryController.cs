@@ -1,10 +1,12 @@
 ﻿using _01_intro.Models;
 using _01_intro.Repositories;
 using _01_intro.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _01_intro.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class CategoryController : Controller
     {
         private readonly CategoryRepository _categoryRepository;
