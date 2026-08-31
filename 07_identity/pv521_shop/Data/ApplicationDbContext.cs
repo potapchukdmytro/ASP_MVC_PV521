@@ -50,6 +50,19 @@ namespace _01_intro.Data
                 .HasMaxLength(255);
             });
 
+            // User
+            modelBuilder.Entity<ApplicationUser>(e =>
+            {
+                e.Property(u => u.FirstName)
+                .HasMaxLength(100);
+
+                e.Property(u => u.LastName)
+                .HasMaxLength(100);
+
+                e.Property(u => u.Image)
+                .HasMaxLength(50); 
+            });
+
             // Relationships
 
             // Product <-> Category many to one
