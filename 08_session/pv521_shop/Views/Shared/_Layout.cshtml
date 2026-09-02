@@ -40,24 +40,26 @@
                             <a class="nav-link" asp-controller="Home" asp-action="About">Про нас</a>
                         </li>
                         <li>
-                            <div class="position-relative d-flex align-items-center h-100 me-4">
-                                <div class="bg-danger position-absolute rounded-circle align-items-center d-inline-flex justify-content-center" 
-                                     style="width: 20px; height: 20px; top: 0; right: -7px;">
-                                    <span class="text-white" style="font-size: 0.75rem;">
-                                        @* @(Accessor.HttpContext != null 
-                                        ? CartService.Count(Accessor.HttpContext.Session) : 0) *@
-                                            @if (Accessor.HttpContext != null)
-                                            {   
-                                                @CartService.Count(Accessor.HttpContext.Session);
-                                            }
-                                            else
-                                            {
-                                                @:0
-                                            }
-                                        </span>
+                            <a asp-controller="Cart" asp-action="Index" class="text-black">
+                                <div class="position-relative d-flex align-items-center h-100 me-4">
+                                    <div class="bg-danger position-absolute rounded-circle align-items-center d-inline-flex justify-content-center" 
+                                         style="width: 20px; height: 20px; top: 0; right: -7px;">
+                                        <span class="text-white" style="font-size: 0.75rem;">
+                                            @* @(Accessor.HttpContext != null 
+                                            ? CartService.Count(Accessor.HttpContext.Session) : 0) *@
+                                                @if (Accessor.HttpContext != null)
+                                                {   
+                                                    @CartService.Count(Accessor.HttpContext.Session);
+                                                }
+                                                else
+                                                {
+                                                    @:0
+                                                }
+                                            </span>
+                                    </div>
+                                    <i class="bi bi-cart3" style="font-size: 1.65rem;"></i>
                                 </div>
-                                <i class="bi bi-cart3" style="font-size: 1.65rem;"></i>
-                            </div>
+                            </a>
                         </li>
                         <li>
                             <partial name="_loginPartial"/>
