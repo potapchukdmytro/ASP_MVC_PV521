@@ -1,4 +1,5 @@
 ﻿@model CatalogVM
+@inject IHttpContextAccessor Accessor
 
 @{
     ViewData["Title"] = "Каталог";
@@ -7,10 +8,10 @@
 <div>
     <div class="container">
         <div class="row">
-            @foreach(var product in Model.Products)
-             {
+            @foreach (var product in Model.Products)
+            {
                 <div class="col-2 border-bottom border-end p-4">
-                    <div class="my-4">   
+                    <div class="my-4">
                         <img style="object-fit: contain; width: 100%;" alt="@product.Name" src="https://content2.rozetka.com.ua/goods/images/big/414842610.jpg" />
                     </div>
                     <div style="font-size: 0.9rem;">
@@ -21,7 +22,18 @@
                             @product.Price ₴
                         </div>
                         <div>
-                            <i class="bi bi-cart" style="font-size: 1.4rem; color: green;"></i>
+                            @if (Accessor.HttpContext == null || !CartService.IsInCart(Accessor.HttpContext.Session, product.Id))
+                            {
+                                <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@product.Id">
+                                    <i class="bi bi-cart text-success" style="font-size: 1.4rem;"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-productId="@product.Id">
+                                    <i class="bi bi-cart-check-fill text-success" style="font-size: 1.4rem;"></i>
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>

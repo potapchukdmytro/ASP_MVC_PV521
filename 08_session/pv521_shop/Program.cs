@@ -51,6 +51,15 @@ builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<IEmailSender, EmailService>();
 
+// Add session
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -67,6 +76,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.UseSession();
 
 // For identity ui
 app.MapRazorPages();
