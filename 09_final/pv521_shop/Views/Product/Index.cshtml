@@ -5,8 +5,19 @@
     ViewData["Title"] = "Каталог";
 }
 
-<div>
-    <div class="container">
+<div class="row">
+    @* Side bar *@
+    <div class="col-2 border-end d-flex flex-column">
+        <div class="mx-5 my-1"><a asp-action="Index">Всі товари</a></div>
+        @foreach (var category in Model.Categories)
+        {
+            <div class="mx-5 my-1">
+                <a asp-action="Index" asp-route-category="@category.Name">@category.Name</a>
+            </div>
+        }
+    </div>
+
+    <div class="col-8">
         <div class="row">
             @foreach (var product in Model.Products)
             {
@@ -21,7 +32,7 @@
                         <div class="flex-grow-1" style="font-size: 1.2rem; font-weight: bold; color: #E80D29;">
                             @product.Price ₴
                         </div>
-                        @if(product.Amount > 0)
+                        @if (product.Amount > 0)
                         {
                             <div>
                                 @if (Accessor.HttpContext == null || !CartService.IsInCart(Accessor.HttpContext.Session, product.Id))
@@ -39,39 +50,48 @@
                             </div>
                         }
                     </div>
-                    @if(product.Amount == 0)
+                    @if (product.Amount == 0)
                     {
                         <span>Немає в наявності</span>
                     }
                 </div>
             }
         </div>
-        <div class="d-flex justify-content-center mt-4">
-            <ul class="pagination">
-                @* prev *@
-                <li class="page-item">
-                    <a asp-action="Index" asp-route-page="@(Model.page - 1)"
-                       class="@(Model.page == 1 ? "page-link disabled" : "page-link")">
-                        &laquo;
-                    </a>
-                </li>
-
-                @for (int i = 1; i <= Model.pages; i++)
-                {
-                    <li class="@(Model.page == i ? "page-item active" : "page-item")">
-                        <a asp-action="Index" asp-route-page="@i" class="page-link">@i</a>
+        @if (Model.LastPage > 1)
+        {
+            <div class="d-flex justify-content-center mt-4">
+                <ul class="pagination">
+                    @* prev *@
+                    <li class="page-item">
+                        <a asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-category="@Model.Category"
+                           class="@(Model.Page == 1 ? "page-link disabled" : "page-link")">
+                            &laquo;
+                        </a>
                     </li>
-                }
 
-                @* next *@
-                <li class="page-item">
-                    <a asp-action="Index" asp-route-page="@(Model.page + 1)"
-                       class="@(Model.page == Model.pages ? "page-link disabled" : "page-link")">
-                        &raquo;
-                    </a>
-                </li>
+                    @foreach (var p in Model.Pages)
+                    {
+                        @if (p == -1)
+                        {
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                            continue;
+                        }  
+                        <li class="@(Model.Page == p ? "page-item active" : "page-item")">
+                            <a asp-action="Index" asp-route-page="@p" asp-route-category="@Model.Category" class="page-link">@p</a>
+                        </li>
+                    }
 
-                @* @if(Model.page < Model.pages)
+                    @* next *@
+                    <li class="page-item">
+                        <a asp-action="Index" asp-route-page="@(Model.Page + 1)" asp-route-category="@Model.Category"
+                           class="@(Model.Page == Model.LastPage ? "page-link disabled" : "page-link")">
+                            &raquo;
+                        </a>
+                    </li>
+
+                    @* @if(Model.page < Model.pages)
                      {
                 <li class="page-item">
                     <a asp-action="Index" asp-route-page="@(Model.page + 1)"
@@ -80,7 +100,10 @@
                     </a>
                 </li>
                 } *@
-            </ul>
-        </div>
+                </ul>
+            </div>
+        }
+    </div>
+    <div class="col-2">
     </div>
 </div>

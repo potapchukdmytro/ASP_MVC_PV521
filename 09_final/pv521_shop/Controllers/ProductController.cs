@@ -24,11 +24,37 @@ namespace _01_intro.Controllers
             string? name = product.Images.FirstOrDefault(i => i.IsPreview)?.Name;
             return name != null ? $"{product.Id}/{name}" : null;
         }
-
-        public async Task<IActionResult> Index(int page = 1)
+        
+        private int[] GetPages(int page, int count)
         {
-            IQueryable<Product> models = _productRepository.Products.Include(p => p.Images);
+            if(count <= 5)
+            {
+                return Enumerable.Range(1, count).ToArray();
+            }
 
+            if (page <= 3)
+            {
+                return [1, 2, 3, 4, -1, count];
+            }
+
+            if(page >= count - 2)
+            {
+                return [1, -1, count - 3, count - 2, count -1, count,];
+            }
+
+            return [1, -1, page - 1, page, page + 1, -1, count];
+        }
+
+        public async Task<IActionResult> Index(int page = 1, string? category = null)
+        {
+            IQueryable<Product> models = _productRepository.Products
+                .Include(p => p.Images)
+                .Include(p => p.Category);
+
+            if(!string.IsNullOrEmpty(category))
+            {
+                models = models.Where(p => p.Category!.Name.ToLower() == category.ToLower());
+            }
 
             // Pagination logic
             int count = models.Count();
@@ -52,8 +78,11 @@ namespace _01_intro.Controllers
             var vm = new CatalogVM
             {
                 Products = viewModels,
-                page = page,
-                pages = pages
+                Page = page,
+                LastPage = pages,
+                Category = category,
+                Categories = await _categoryRepository.Categories.ToListAsync(),
+                Pages = GetPages(page, pages)
             };
 
             return View(vm);
