@@ -1,0 +1,86 @@
+﻿@model CatalogVM
+@inject IHttpContextAccessor Accessor
+
+@{
+    ViewData["Title"] = "Каталог";
+}
+
+<div>
+    <div class="container">
+        <div class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-2 border-bottom border-end p-4 @(product.Amount > 0 ? "" : "opacity-25")">
+                    <div class="my-4">
+                        <img style="object-fit: contain; width: 100%;" alt="@product.Name" src="https://content2.rozetka.com.ua/goods/images/big/414842610.jpg" />
+                    </div>
+                    <div style="font-size: 0.9rem;">
+                        @product.Name
+                    </div>
+                    <div class="d-flex mt-3">
+                        <div class="flex-grow-1" style="font-size: 1.2rem; font-weight: bold; color: #E80D29;">
+                            @product.Price ₴
+                        </div>
+                        @if(product.Amount > 0)
+                        {
+                            <div>
+                                @if (Accessor.HttpContext == null || !CartService.IsInCart(Accessor.HttpContext.Session, product.Id))
+                                {
+                                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@product.Id">
+                                        <i class="bi bi-cart text-success" style="font-size: 1.4rem;"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-productId="@product.Id">
+                                        <i class="bi bi-cart-check-fill text-success" style="font-size: 1.4rem;"></i>
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
+                    @if(product.Amount == 0)
+                    {
+                        <span>Немає в наявності</span>
+                    }
+                </div>
+            }
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            <ul class="pagination">
+                @* prev *@
+                <li class="page-item">
+                    <a asp-action="Index" asp-route-page="@(Model.page - 1)"
+                       class="@(Model.page == 1 ? "page-link disabled" : "page-link")">
+                        &laquo;
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= Model.pages; i++)
+                {
+                    <li class="@(Model.page == i ? "page-item active" : "page-item")">
+                        <a asp-action="Index" asp-route-page="@i" class="page-link">@i</a>
+                    </li>
+                }
+
+                @* next *@
+                <li class="page-item">
+                    <a asp-action="Index" asp-route-page="@(Model.page + 1)"
+                       class="@(Model.page == Model.pages ? "page-link disabled" : "page-link")">
+                        &raquo;
+                    </a>
+                </li>
+
+                @* @if(Model.page < Model.pages)
+                     {
+                <li class="page-item">
+                    <a asp-action="Index" asp-route-page="@(Model.page + 1)"
+                       class="@(Model.page == Model.pages ? "page-link disabled" : "page-link")">
+                        &raquo;
+                    </a>
+                </li>
+                } *@
+            </ul>
+        </div>
+    </div>
+</div>
