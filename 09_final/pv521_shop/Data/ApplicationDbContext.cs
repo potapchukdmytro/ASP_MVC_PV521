@@ -13,6 +13,7 @@ namespace _01_intro.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,6 +51,16 @@ namespace _01_intro.Data
                 .HasMaxLength(255);
             });
 
+            // ProductImage
+            modelBuilder.Entity<ProductImage>(e =>
+            {
+                e.HasKey(p => p.Id);
+
+                e.Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+            });
+
             // User
             modelBuilder.Entity<ApplicationUser>(e =>
             {
@@ -71,6 +82,14 @@ namespace _01_intro.Data
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+
+            // Product <-> ProductImage one to many
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Images)
+                .WithOne(pi => pi.Product)
+                .HasForeignKey(pi => pi.ProductId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
         }
     }

@@ -1,0 +1,69 @@
+﻿@model ProductCreateVM
+@{
+    ViewData["Title"] = "Новий товар";
+}
+
+<div>
+    <h2 class="text-center">Новий товар</h2>
+    <form enctype="multipart/form-data"
+          asp-controller="Product"
+          asp-action="Create"
+          method="post"
+          class="m-auto border p-5 mt-4 rounded-3"
+          style="width: 40%; background-color: #efefef;">
+
+        @* name *@
+        <div>
+            <label for="name" class="form-label">Назва</label>
+            <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Введіть назву товару">
+            <span asp-validation-for="Name" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
+        </div>
+
+        @* descripton *@
+        <div>
+            <label for="description" class="form-label mt-2">Опис</label>
+            <input asp-for="Description" type="text" class="form-control" id="description" placeholder="Введіть опис товару">
+            <span asp-validation-for="Description" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
+        </div>
+
+        @* price *@
+        <div>
+            <label for="price" class="form-label mt-2">Ціна</label>
+            <input asp-for="Price" type="number" class="form-control" id="price">
+            <span asp-validation-for="Price" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
+        </div>
+
+        @* amount *@
+        <div>
+            <label for="amount" class="form-label mt-2">Кількість</label>
+            <input asp-for="Amount" type="number" class="form-control" id="amount">
+            <span asp-validation-for="Amount" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
+        </div>
+
+        @* category *@
+        <div>
+            <label for="categoryId" class="form-label mt-2">Категорія</label>
+            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control" id="categoryId"> 
+            </select>
+            <span asp-validation-for="CategoryId" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
+        </div>
+
+        @* preview image *@
+        <div>
+            <label for="preview" class="form-label mt-2">Оглядове зображення</label>
+            <input asp-for="Preview" accept="image/*" type="file" class="form-control" id="preview">
+            <span asp-validation-for="Preview" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
+        </div>
+
+        @* images *@
+        <div>
+            <label for="images" class="form-label mt-2">Зображення</label>
+            <input asp-for="Images" accept="image/*" type="file" class="form-control" id="images" multiple>
+            <span asp-validation-for="Images" class="mx-2" style="color: red; font-size: 0.8rem;"></span>
+        </div>
+
+        <div class="mt-2 text-center">
+            <input type="submit" class="btn btn-primary w-50" value="Додати" />
+        </div>
+    </form>
+</div>

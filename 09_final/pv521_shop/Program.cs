@@ -46,6 +46,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
 
 // Створює клас після отримання запиту та видаляє після відправлення відповіді
 builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<ProductRepository>();
 
 // Add services
 builder.Services.AddScoped<ImageService>();

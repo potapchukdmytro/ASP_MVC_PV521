@@ -19,7 +19,7 @@ namespace _01_intro.Data.Initializer
             await dbContext.Database.MigrateAsync();
 
             // Roles and Users
-            if(!roleManager.Roles.Any())
+            if (!roleManager.Roles.Any())
             {
                 var adminRole = new IdentityRole { Name = "admin" };
                 var userRole = new IdentityRole { Name = "user" };
