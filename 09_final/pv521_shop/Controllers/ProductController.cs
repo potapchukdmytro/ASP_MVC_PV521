@@ -4,6 +4,7 @@ using _01_intro.Repositories;
 using _01_intro.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace _01_intro.Controllers
 {
@@ -18,19 +19,39 @@ namespace _01_intro.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        public IActionResult Index(int page = 1)
+        private string? GetPreviewImage(Product product)
         {
-            IQueryable<Product> products = _productRepository.Products;
+            string? name = product.Images.FirstOrDefault(i => i.IsPreview)?.Name;
+            return name != null ? $"{product.Id}/{name}" : null;
+        }
 
-            int count = products.Count();
+        public async Task<IActionResult> Index(int page = 1)
+        {
+            IQueryable<Product> models = _productRepository.Products.Include(p => p.Images);
+
+
+            // Pagination logic
+            int count = models.Count();
             int pageSize = 18;
             int pages = (int)Math.Ceiling((double)count / pageSize);
 
-            products = products.Skip((page - 1) * pageSize).Take(pageSize);
+            var products = await models.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            // Map products to view models
+            var viewModels = products.Select(p => 
+                new ProductVM
+                {
+                    Id = p.Id,
+                    Amount = p.Amount,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Category = p.Category,
+                    Preview = GetPreviewImage(p)
+                });
 
             var vm = new CatalogVM
             {
-                Products = products,
+                Products = viewModels,
                 page = page,
                 pages = pages
             };

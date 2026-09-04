@@ -12,7 +12,7 @@
             {
                 <div class="col-2 border-bottom border-end p-4 @(product.Amount > 0 ? "" : "opacity-25")">
                     <div class="my-4">
-                        <img style="object-fit: contain; width: 100%;" alt="@product.Name" src="~/images/products/@(product.Image != null ? product.Image : "default.jpg")" />
+                        <img style="object-fit: contain; width: 100%;" alt="@product.Name" src="~/images/products/@(product.Preview != null ? product.Preview : "default.jpg")" />
                     </div>
                     <div style="font-size: 0.9rem;">
                         @product.Name

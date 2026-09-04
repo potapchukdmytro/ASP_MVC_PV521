@@ -46,6 +46,16 @@ namespace _01_intro.Repositories
                 }
             }
 
+            if(viewModel.Images.Count > 0)
+            {
+                var names = await _imageService.SaveImagesAsync(viewModel.Images, folderPath);
+
+                var images = names
+                    .Where(n => n != null)
+                    .Select(n => new ProductImage { Name = n!, IsPreview = false });
+                model.Images.AddRange(images);
+            }
+
             await _context.SaveChangesAsync();
 
             return null;
